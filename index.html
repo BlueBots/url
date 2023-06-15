@@ -2,18 +2,50 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="minimum-scale=1, initial-scale=1, width=device-width"
-    />
-    <title>Invalid URL!</title>
+    <title>BlueBoy Redirect</title>
+    <script>
+      function redirect() {
+        var input = document.getElementById("redirectInput").value;
+        if (input.trim() === "") {
+          alert("Please enter a valid redirect value.");
+        } else {
+          var redirectURL = "https://blueboy.cf/" + input;
+          window.location.href = redirectURL;
+        }
+      }
+    </script>
+    <style>
+      .popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #fff;
+        border: 1px solid #ccc;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      }
+
+      .popup input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+      }
+
+      .popup input[type="button"] {
+        padding: 10px 20px;
+        background-color: #4caf50;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+      }
+    </style>
   </head>
   <body>
-    <p>Short URL is invalid! (Or you have been spamming the site too much)</p>
-    <p>
-      <a href="https://github.com/nelsontky/gh-pages-url-shortener">
-        Learn more about this URL shortener
-      </a>
-    </p>
+    <div class="popup">
+      <input type="text" id="redirectInput" placeholder="Enter the redirect value" />
+      <br />
+      <input type="button" value="Go" onclick="redirect()" />
+    </div>
   </body>
 </html>
