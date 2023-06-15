@@ -13,6 +13,29 @@
           window.location.href = redirectURL;
         }
       }
+
+      function createRedirect() {
+        var path = document.getElementById("createPath").value;
+        var url = document.getElementById("createURL").value;
+
+        if (path.trim() === "" || url.trim() === "") {
+          alert("Please enter both a path and a URL.");
+          return;
+        }
+
+        var request = new XMLHttpRequest();
+        request.open("POST", "https://api.github.com/repos/BlueBots/url/issues");
+        request.setRequestHeader("Content-Type", "application/json");
+        request.setRequestHeader("Authorization", "Bearer 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");
+
+        var body = {
+          title: path,
+          body: url
+        };
+
+        request.send(JSON.stringify(body));
+        alert("Redirect issue created successfully!");
+      }
     </script>
     <style>
       .popup {
@@ -46,6 +69,15 @@
       <input type="text" id="redirectInput" placeholder="Enter the redirect value" />
       <br />
       <input type="button" value="Go" onclick="redirect()" />
+    </div>
+
+    <div class="popup">
+      <h3>Create Redirect</h3>
+      <input type="text" id="createPath" placeholder="Enter the redirect path" />
+      <br />
+      <input type="text" id="createURL" placeholder="Enter the target URL" />
+      <br />
+      <input type="button" value="Create" onclick="createRedirect()" />
     </div>
   </body>
 </html>
