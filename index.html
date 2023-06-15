@@ -2,19 +2,15 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>BlueBoy Redirect</title>
-    <script>
-      function redirect() {
-        var input = document.getElementById("redirectInput").value;
-        if (input.trim() === "") {
-          alert("Please enter a valid redirect value.");
-        } else {
-          var redirectURL = "https://url.blueboy.cf/" + input;
-          window.location.href = redirectURL;
-        }
-      }
-    </script>
+    <title>Brandon's Redirects</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/BlueBots/url/main/favico.png" type="image/png">
     <style>
+      body {
+        background-color: #222;
+        color: #fff;
+        font-family: Arial, sans-serif;
+      }
+
       .popup {
         position: fixed;
         top: 50%;
@@ -30,22 +26,35 @@
         width: 100%;
         padding: 10px;
         margin-bottom: 10px;
+        box-sizing: border-box;
       }
 
       .popup input[type="button"] {
         padding: 10px 20px;
-        background-color: #4caf50;
-        color: #fff;
+        background: linear-gradient(135deg, #1f8cea, #3b5998);
         border: none;
+        color: #fff;
         cursor: pointer;
       }
     </style>
+    <script>
+      function redirect() {
+        var input = document.getElementById("redirectInput").value;
+        if (input.trim() === "") {
+          alert("Please enter a valid redirect value.");
+        } else {
+          var redirectURL = "https://url.blueboy.cf/" + input;
+          window.location.href = redirectURL;
+        }
+      }
+    </script>
   </head>
   <body>
     <div class="popup">
+      <h1>Brandon's Redirects</h1>
       <input type="text" id="redirectInput" placeholder="Enter the redirect value" />
       <br />
-      <input type="button" value="Go" onclick="redirect()" />
+      <input type="button" value="Redirect" onclick="redirect()" />
     </div>
   </body>
 </html>
