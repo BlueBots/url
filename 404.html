@@ -41,8 +41,7 @@
       }
     </style>
     <script>
-      setTimeout(function () {
-         /**
+       /**
        * Configuration goes here
        */
       // Format: https://api.github.com/repos/{owner}/{repo}/issues
@@ -90,25 +89,24 @@
               if (urls && urls.length > 0 && isUrl(urls[0])) {
                 location.replace(urls[0]);
               } else {
-                location.replace(homepage);
+                location.replace("https://url.blueboy.cf/error");
               }
             } else {
-              location.replace(homepage);
+              location.replace("https://url.blueboy.cf/error");
             }
           } catch (e) {
-            location.replace(homepage);
+            location.replace("https://url.blueboy.cf/error");
           }
         };
 
         xhr.onerror = function () {
-          location.replace(homepage);
+          location.replace("https://url.blueboy.cf/error");
         };
         xhr.open("GET", GITHUB_ISSUES_LINK);
         xhr.send();
       }
 
-      redirect(); // Redirect to the desired site
-      }, 50); // Change the delay to adjust the redirect time (in milliseconds)
+      redirect();
     </script>
   </head>
   <body>
