@@ -21,7 +21,7 @@
         left: 50%;
         transform: translate(-50%, -50%);
         background-color: #1a1a1a; /* Golden-black dark color */
-        padding: 40px; /* Increase the padding for a larger box */
+        padding: 40px 40px 20px; /* Updated padding for smaller bottom */
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 0, 0, 0.6); /* Updated box shadow effect */
         text-align: center;
       }
@@ -48,9 +48,17 @@
         color: #fff;
         cursor: pointer;
         display: block;
-        margin: 0 auto;
+        margin: 0 auto 10px; /* Added margin-bottom */
         font-family: 'Advio Friendly', Arial, sans-serif;
         font-size: 16px;
+      }
+
+      .popup a {
+        display: block;
+        color: #fff;
+        font-size: 14px;
+        margin-top: 15px; /* Increased margin-top */
+        text-decoration: none;
       }
     </style>
     <script>
@@ -71,6 +79,7 @@
       <input type="text" id="redirectInput" placeholder="Where would you like to go?" />
       <br />
       <input type="button" value="Redirect" onclick="redirect()" />
+      <a href="https://url.blueboy.cf/create">Make your own redirect</a> <!-- Updated link URL -->
     </div>
   </body>
 </html>
