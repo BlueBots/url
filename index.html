@@ -1,84 +1,105 @@
 <!DOCTYPE html>
-<html><head>
-    <meta charset="utf-8" />
-    <title>Brandon's Redirects</title>
-    <link rel="icon" href="https://raw.githubusercontent.com/BlueBots/url/main/favico.png" type="image/png">
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Advio+Friendly&display=swap');
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brandon's Redirects</title>
+  <link rel="icon" href="https://raw.githubusercontent.com/BlueBots/url/main/favico.png" type="image/png">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Advio+Friendly&display=swap');
 
-      body {
-        background: url("https://url.blueboy.cf/black-abstract-dark-3840x2160-9729.jpg") no-repeat center center fixed;
-        background-size: cover;
-        background-color: rgba(0, 0, 0, 0.7); /* Updated dimming effect */
-        color: #fff;
-        font-family: 'Advio Friendly', Arial, sans-serif;
-      }
+    body {
+      background: url("https://url.blueboy.cf/black-abstract-dark-3840x2160-9729.jpg") no-repeat center center fixed;
+      background-size: cover;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      font-family: 'Advio Friendly', Arial, sans-serif;
+    }
 
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #1a1a1a;
+      padding: 40px 40px 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 0, 0, 0.6);
+      text-align: center;
+    }
+
+    .popup h1 {
+      color: #fff;
+      font-family: 'Advio Friendly', Arial, sans-serif;
+    }
+
+    .popup input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+      font-family: 'Advio Friendly', Arial, sans-serif;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .popup input[type="button"] {
+      padding: 10px 20px;
+      background-color: #d4af37;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      display: block;
+      margin: 0 auto 10px;
+      font-family: 'Advio Friendly', Arial, sans-serif;
+      font-size: 16px;
+    }
+
+    .popup a {
+      display: block;
+      color: #fff;
+      font-size: 14px;
+      margin-top: 15px;
+      text-decoration: none;
+    }
+
+    /* Media queries for responsive design */
+
+    @media only screen and (max-width: 600px) {
       .popup {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: #1a1a1a; /* Golden-black dark color */
-        padding: 40px 40px 20px; /* Updated padding for smaller bottom */
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 0, 0, 0.6); /* Updated box shadow effect */
-        text-align: center;
+        width: 80%;
+        padding: 20px;
       }
 
-      .popup h1 {
-        color: #fff;
-        font-family: 'Advio Friendly', Arial, sans-serif;
-      }
-
-      .popup input[type="text"] {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 10px;
-        box-sizing: border-box;
-        font-family: 'Advio Friendly', Arial, sans-serif;
-        font-size: 16px;
-        color: #333;
-      }
-
-      .popup input[type="button"] {
-        padding: 10px 20px;
-        background-color: #d4af37; /* Golden color */
-        border: none;
-        color: #fff;
-        cursor: pointer;
-        display: block;
-        margin: 0 auto 10px; /* Added margin-bottom */
-        font-family: 'Advio Friendly', Arial, sans-serif;
-        font-size: 16px;
+      .popup input[type="text"],
+      .popup input[type="button"],
+      .popup a {
+        font-size: 14px;
       }
 
       .popup a {
-        display: block;
-        color: #fff;
-        font-size: 14px;
-        margin-top: 15px; /* Increased margin-top */
-        text-decoration: none;
+        margin-top: 10px;
       }
-    </style>
-    <script>
-      function redirect() {
-        var input = document.getElementById("redirectInput").value;
-        if (input.trim() === "") {
-          alert("Please enter a valid redirect value.");
-        } else {
-          var redirectURL = "https://url.blueboy.cf/" + input;
-          window.location.href = redirectURL;
-        }
+    }
+  </style>
+  <script>
+    function redirect() {
+      var input = document.getElementById("redirectInput").value;
+      if (input.trim() === "") {
+        alert("Please enter a valid redirect value.");
+      } else {
+        var redirectURL = "https://url.blueboy.cf/" + input;
+        window.location.href = redirectURL;
       }
-    </script>
-  </head>
-  <body>
-    <div class="popup">
-      <h1>Brandon's Redirects</h1>
-      <input type="text" id="redirectInput" placeholder="Where would you like to go?" />
-      <br />
-      <input type="button" value="Redirect" onclick="redirect()" />
-      <a href="https://url.blueboy.cf/create">Make your own redirect</a> <!-- Updated link URL -->
-    </div>
-  </body>
+    }
+  </script>
+</head>
+<body>
+<div class="popup">
+  <h1>Brandon's Redirects</h1>
+  <input type="text" id="redirectInput" placeholder="Where would you like to go?" />
+  <br />
+  <input type="button" value="Redirect" onclick="redirect()" />
+  <a href="https://url.blueboy.cf/create">Make your own redirect</a>
+</div>
+</body>
 </html>
