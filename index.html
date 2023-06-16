@@ -29,12 +29,13 @@
       .popup h1 {
         color: #fff;
         font-family: 'Advio Friendly', Arial, sans-serif;
+        font-weight: bold; /* Added font weight */
       }
 
       .popup input[type="text"] {
         width: 100%;
         padding: 10px;
-        margin-bottom: 10px;
+        margin-bottom: 15px; /* Increased margin-bottom */
         box-sizing: border-box;
         font-family: 'Advio Friendly', Arial, sans-serif;
         font-size: 16px;
@@ -58,7 +59,7 @@
         color: #fff;
         font-size: 14px;
         margin-top: 15px; /* Increased margin-top */
-        text-decoration: none;
+        text-decoration: underline; /* Added underline */
       }
     </style>
     <script>
@@ -75,7 +76,7 @@
   </head>
   <body>
     <div class="popup">
-      <h1>Brandon's Redirects</h1>
+      <h1><strong>Brandon's Redirects</strong></h1>
       <input type="text" id="redirectInput" placeholder="Where would you like to go?" />
       <br />
       <input type="button" value="Redirect" onclick="redirect()" />
