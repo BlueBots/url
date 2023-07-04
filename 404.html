@@ -85,25 +85,25 @@
 
           if (issue) {
             var issueBody = issue.body;
-            var urlStartIndex = issueBody.indexOf("http");
-            var urlEndIndex = issueBody.indexOf(" ", urlStartIndex);
-            var url = urlEndIndex !== -1 ? issueBody.substring(urlStartIndex, urlEndIndex) : issueBody.substring(urlStartIndex);
+            var urlRegex = /(https?:\/\/[^\s]+)/g;
+            var match = urlRegex.exec(issueBody);
+            var url = match ? match[1] : null;
 
             if (url && isUrl(url)) {
-              location.replace(url);
+              window.location.replace(url);
             } else {
-              location.replace(homepage + "/error");
+              window.location.replace(homepage + "/error");
             }
           } else {
-            location.replace(homepage + "/error");
+            window.location.replace(homepage + "/error");
           }
         } catch (e) {
-          location.replace(homepage + "/error");
+          window.location.replace(homepage + "/error");
         }
       };
 
       xhr.onerror = function () {
-        location.replace(homepage + "/error");
+        window.location.replace(homepage + "/error");
       };
       xhr.open("GET", GITHUB_ISSUES_LINK);
       xhr.send();
