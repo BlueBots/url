@@ -62,7 +62,7 @@
     function isUrl(url) {
       return /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,24}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)+$/.test(
         url
-      ) || /^((?!https?:\/\/)[^\s/$.?#].[^\s]*)$/.test(url);
+      );
     }
 
     function decodeTitle(title) {
@@ -85,7 +85,7 @@
 
           if (issue) {
             var issueBody = issue.body;
-            var urlRegex = /(https?:\/\/[^\s]+)/g;
+            var urlRegex = /(?:https?:\/\/)?([^\s/$.?#].[^\s]*)/g;
             var urls = issueBody.match(urlRegex);
 
             if (urls && urls.length > 0 && isUrl(urls[0])) {
