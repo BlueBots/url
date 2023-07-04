@@ -85,7 +85,7 @@
 
           if (issue) {
             var issueBody = issue.body;
-            var urlRegex = /(?:https?:\/\/)?([^\s/$.?#].[^\s]*)/g;
+            var urlRegex = /(?:https?:\/\/)?([^\s/$.?#].[^\s]*)/;
             var urls = issueBody.match(urlRegex);
 
             if (urls && urls.length > 0 && isUrl(urls[0])) {
