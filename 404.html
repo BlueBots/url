@@ -1,134 +1,118 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title>Redirecting...</title>
-    <link rel="icon" href="https://raw.githubusercontent.com/BlueBots/url/main/favico.png" type="image/png">
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Advio+Friendly&display=swap');
+<head>
+  <meta charset="utf-8" />
+  <title>Redirecting...</title>
+  <link rel="icon" href="https://raw.githubusercontent.com/BlueBots/url/main/favico.png" type="image/png">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Advio+Friendly&display=swap');
 
-      body {
-        background: url("https://raw.githubusercontent.com/BlueBots/url/main/img/aptira_gears_bg.gif") no-repeat center center fixed;
-        background-size: cover;
-        background-color: rgba(0, 0, 0, 0.7); /* Updated dimming effect */
-        color: #fff;
-        font-family: 'Advio Friendly', Arial, sans-serif;
-      }
+    body {
+      background: url("https://raw.githubusercontent.com/BlueBots/url/main/img/aptira_gears_bg.gif") no-repeat center center fixed;
+      background-size: cover;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      font-family: 'Advio Friendly', Arial, sans-serif;
+    }
 
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #1a1a1a;
+      padding: 40px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 0, 0, 0.6);
+      text-align: center;
+    }
+
+    .popup h1 {
+      color: #fff;
+      font-family: 'Advio Friendly', Arial, sans-serif;
+      font-size: 32px;
+    }
+
+    .popup a {
+      display: block;
+      color: #fff;
+      font-size: 14px;
+      margin-top: 15px;
+      text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
       .popup {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: #1a1a1a; /* Golden-black dark color */
-        padding: 40px;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 0, 0, 0.6); /* Updated box shadow effect */
-        text-align: center;
+        padding: 20px;
       }
 
       .popup h1 {
-        color: #fff;
-        font-family: 'Advio Friendly', Arial, sans-serif;
-        font-size: 32px;
+        font-size: 24px;
       }
 
       .popup a {
-        display: block;
-        color: #fff;
-        font-size: 14px;
-        margin-top: 15px; /* Increased margin-top */
-        text-decoration: none;
+        font-size: 12px;
+        margin-top: 10px;
       }
+    }
+  </style>
+  <script>
+    var GITHUB_ISSUES_LINK = "https://api.github.com/repos/BlueBots/url/issues";
+    var PATH_SEGMENTS_TO_SKIP = 0;
 
-      /* Media query for screens with a maximum width of 768px */
-      @media (max-width: 768px) {
-        .popup {
-          padding: 20px; /* Decreased padding */
-        }
+    function isUrl(url) {
+      return /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,24}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)+$/.test(url);
+    }
 
-        .popup h1 {
-          font-size: 24px; /* Decreased font size */
-        }
+    function decodeTitle(title) {
+      return decodeURIComponent(title.replace(/\+/g, " "));
+    }
 
-        .popup a {
-          font-size: 12px; /* Decreased font size */
-          margin-top: 10px; /* Decreased margin-top */
-        }
-      }
-    </style>
-    <script>
-       /**
-       * Configuration goes here
-       */
-      // Format: https://api.github.com/repos/{owner}/{repo}/issues
-      var GITHUB_ISSUES_LINK =
-        "https://api.github.com/repos/BlueBots/url/issues";
-      var PATH_SEGMENTS_TO_SKIP = 0;
+    function redirect() {
+      var location = window.location;
+      var issueName = decodeTitle(location.pathname.split("/")[PATH_SEGMENTS_TO_SKIP + 1]);
+      var homepage = location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/" + location.pathname.split("/")[PATH_SEGMENTS_TO_SKIP];
 
-      /**
-       * DO NOT TOUCH ANYTHING BELOW THIS COMMENT UNLESS YOU KNOW WHAT YOU ARE DOING
-       */
-      function isUrl(url) {
-        // Regex from https://stackoverflow.com/a/3809435, with a modification to allow for TLDs of up to 24 characters
-        return /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,24}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)+$/.test(
-          url
-        );
-      }
+      var xhr = new XMLHttpRequest();
 
-      function redirect() {
-        var location = window.location;
-        var issueName = location.pathname.split("/")[
-          PATH_SEGMENTS_TO_SKIP + 1
-        ];
-        var homepage =
-          location.protocol +
-          "//" +
-          location.hostname +
-          (location.port ? ":" + location.port : "") +
-          "/" +
-          location.pathname.split("/")[PATH_SEGMENTS_TO_SKIP];
+      xhr.onload = function () {
+        try {
+          var issues = JSON.parse(xhr.response);
+          var issue = issues.find(function (item) {
+            return decodeTitle(item.title.toLowerCase()) === issueName.toLowerCase();
+          });
 
-        var xhr = new XMLHttpRequest();
+          if (issue) {
+            var issueBody = issue.body;
+            var urlRegex = /(https?:\/\/[^\s]+)/g;
+            var urls = issueBody.match(urlRegex);
 
-        xhr.onload = function () {
-          try {
-            var issues = JSON.parse(xhr.response);
-            var issue = issues.find(function (item) {
-              return item.title.toLowerCase() === issueName.toLowerCase();
-            });
-
-            if (issue) {
-              var issueBody = issue.body;
-              var urlRegex = /(https?:\/\/[^\s]+)/g;
-              var urls = issueBody.match(urlRegex);
-
-              if (urls && urls.length > 0 && isUrl(urls[0])) {
-                location.replace(urls[0]);
-              } else {
-                location.replace("https://url.blueboy.cf/error");
-              }
+            if (urls && urls.length > 0 && isUrl(urls[0])) {
+              location.replace(urls[0]);
             } else {
               location.replace("https://url.blueboy.cf/error");
             }
-          } catch (e) {
+          } else {
             location.replace("https://url.blueboy.cf/error");
           }
-        };
-
-        xhr.onerror = function () {
+        } catch (e) {
           location.replace("https://url.blueboy.cf/error");
-        };
-        xhr.open("GET", GITHUB_ISSUES_LINK);
-        xhr.send();
-      }
+        }
+      };
 
-      redirect();
-    </script>
-  </head>
-  <body>
-    <div class="popup">
-      <h1>Redirecting...</h1>
-      <a href="https://url.blueboy.cf">Go back</a>
-    </div>
-  </body>
+      xhr.onerror = function () {
+        location.replace("https://url.blueboy.cf/error");
+      };
+      xhr.open("GET", GITHUB_ISSUES_LINK);
+      xhr.send();
+    }
+
+    redirect();
+  </script>
+</head>
+<body>
+<div class="popup">
+  <h1>Redirecting...</h1>
+  <a href="https://url.blueboy.cf">Go back</a>
+</div>
+</body>
 </html>
