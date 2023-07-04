@@ -85,24 +85,25 @@
 
           if (issue) {
             var issueBody = issue.body;
-            var urlRegex = /(?:https?:\/\/)?([^\s/$.?#].[^\s]*)/;
-            var urls = issueBody.match(urlRegex);
+            var urlStartIndex = issueBody.indexOf("http");
+            var urlEndIndex = issueBody.indexOf(" ", urlStartIndex);
+            var url = urlEndIndex !== -1 ? issueBody.substring(urlStartIndex, urlEndIndex) : issueBody.substring(urlStartIndex);
 
-            if (urls && urls.length > 0 && isUrl(urls[0])) {
-              location.replace(urls[0]);
+            if (url && isUrl(url)) {
+              location.replace(url);
             } else {
-              location.replace("https://url.blueboy.cf/error");
+              location.replace(homepage + "/error");
             }
           } else {
-            location.replace("https://url.blueboy.cf/error");
+            location.replace(homepage + "/error");
           }
         } catch (e) {
-          location.replace("https://url.blueboy.cf/error");
+          location.replace(homepage + "/error");
         }
       };
 
       xhr.onerror = function () {
-        location.replace("https://url.blueboy.cf/error");
+        location.replace(homepage + "/error");
       };
       xhr.open("GET", GITHUB_ISSUES_LINK);
       xhr.send();
