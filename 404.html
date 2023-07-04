@@ -60,9 +60,7 @@
     var PATH_SEGMENTS_TO_SKIP = 0;
 
     function isUrl(url) {
-      return /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,24}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)+$/.test(
-        url
-      );
+      return /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,24}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)+$/.test(url);
     }
 
     function decodeTitle(title) {
@@ -86,24 +84,23 @@
           if (issue) {
             var issueBody = issue.body;
             var urlRegex = /(https?:\/\/[^\s]+)/g;
-            var match = urlRegex.exec(issueBody);
-            var url = match ? match[1] : null;
+            var urls = issueBody.match(urlRegex);
 
-            if (url && isUrl(url)) {
-              window.location.replace(url);
+            if (urls && urls.length > 0 && isUrl(urls[0])) {
+              location.replace(urls[0]);
             } else {
-              window.location.replace(homepage + "/error");
+              location.replace("https://url.blueboy.cf/error");
             }
           } else {
-            window.location.replace(homepage + "/error");
+            location.replace("https://url.blueboy.cf/error");
           }
         } catch (e) {
-          window.location.replace(homepage + "/error");
+          location.replace("https://url.blueboy.cf/error");
         }
       };
 
       xhr.onerror = function () {
-        window.location.replace(homepage + "/error");
+        location.replace("https://url.blueboy.cf/error");
       };
       xhr.open("GET", GITHUB_ISSUES_LINK);
       xhr.send();
