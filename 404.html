@@ -56,7 +56,7 @@
     }
   </style>
   <script>
-    var PASTEBIN_API_KEY = "{{ site.PASTEBIN_API }}";
+    var PASTEBIN_API_KEY = "YOUR_PASTEBIN_API_KEY";
     var PASTEBIN_API_URL = "https://pastebin.com/api/api_post.php";
     var GITHUB_ISSUES_LINK = "https://api.github.com/repos/BlueBots/url/issues";
     var PATH_SEGMENTS_TO_SKIP = 0;
@@ -74,59 +74,28 @@
       var redirectTitle = decodeTitle(location.pathname.split("/")[PATH_SEGMENTS_TO_SKIP + 1]);
       var homepage = location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/" + location.pathname.split("/")[PATH_SEGMENTS_TO_SKIP];
 
-      // Function to handle GitHub issues
-      function handleGitHubIssues(issues) {
-        var issue = issues.find(function (item) {
-          return decodeTitle(item.title.toLowerCase()) === redirectTitle.toLowerCase();
-        });
-
-        if (issue) {
-          var issueBody = issue.body;
-          var urlRegex = /(https?:\/\/[^\s]+)/g;
-          var urls = issueBody.match(urlRegex);
-
-          if (urls && urls.length > 0 && isUrl(urls[0])) {
-            location.replace(urls[0]);
-          } else {
-            handlePastebin();
-          }
-        } else {
-          handlePastebin();
-        }
-      }
-
-      // Function to handle Pastebin posts
-      function handlePastebin() {
-        var pastebinScript = document.createElement("script");
-        pastebinScript.src = `${PASTEBIN_API_URL}?api_dev_key=${PASTEBIN_API_KEY}&api_option=paste&api_paste_format=json&api_callback=pastebinCallback`;
-        document.body.appendChild(pastebinScript);
-      }
-
-      // Callback function for JSONP response from Pastebin
-      function pastebinCallback(response) {
-        try {
-          if (response && response[0] && response[0].url) {
-            var url = response[0].url;
-            if (isUrl(url)) {
-              location.replace(url);
-            } else {
-              location.replace("https://url.blueboy.cf/error");
-            }
-          } else {
-            location.replace("https://url.blueboy.cf/error");
-          }
-        } catch (e) {
-          location.replace("https://url.blueboy.cf/error");
-        }
-      }
-
-      // Fetch GitHub issues
       var xhr = new XMLHttpRequest();
 
       xhr.onload = function () {
         try {
           var issues = JSON.parse(xhr.response);
-          handleGitHubIssues(issues);
+          var issue = issues.find(function (item) {
+            return decodeTitle(item.title.toLowerCase()) === redirectTitle.toLowerCase();
+          });
+
+          if (issue) {
+            var issueBody = issue.body;
+            var urlRegex = /(https?:\/\/[^\s]+)/g;
+            var urls = issueBody.match(urlRegex);
+
+            if (urls && urls.length > 0 && isUrl(urls[0])) {
+              location.replace(urls[0]);
+            } else {
+              handlePastebin();
+            }
+          } else {
+            handlePastebin();
+          }
         } catch (e) {
           handlePastebin();
         }
@@ -138,6 +107,43 @@
 
       xhr.open("GET", GITHUB_ISSUES_LINK);
       xhr.send();
+
+      function handlePastebin() {
+        var requestData = JSON.stringify({
+          api_dev_key: PASTEBIN_API_KEY,
+          api_option: "paste",
+          api_paste_code: redirectTitle,
+          api_paste_private: "0"
+        });
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.onload = function () {
+          try {
+            var response = JSON.parse(xhr.responseText);
+            if (response && response.status === 0 && response.url) {
+              var url = response.url;
+              if (isUrl(url)) {
+                location.replace(url);
+              } else {
+                location.replace("https://url.blueboy.cf/error");
+              }
+            } else {
+              location.replace("https://url.blueboy.cf/error");
+            }
+          } catch (e) {
+            location.replace("https://url.blueboy.cf/error");
+          }
+        };
+
+        xhr.onerror = function () {
+          location.replace("https://url.blueboy.cf/error");
+        };
+
+        xhr.open("POST", PASTEBIN_API_URL);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(requestData);
+      }
     }
 
     redirect();
