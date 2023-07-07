@@ -56,6 +56,8 @@
     }
   </style>
   <script>
+    var PASTEBIN_API_KEY = secrets.PASTEBIN_API;
+    var PASTEBIN_API_URL = "https://pastebin.com/api/api_post.php";
     var GITHUB_ISSUES_LINK = "https://api.github.com/repos/BlueBots/url/issues";
     var PATH_SEGMENTS_TO_SKIP = 0;
 
@@ -69,39 +71,78 @@
 
     function redirect() {
       var location = window.location;
-      var issueName = decodeTitle(location.pathname.split("/")[PATH_SEGMENTS_TO_SKIP + 1]);
+      var redirectTitle = decodeTitle(location.pathname.split("/")[PATH_SEGMENTS_TO_SKIP + 1]);
       var homepage = location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/" + location.pathname.split("/")[PATH_SEGMENTS_TO_SKIP];
 
-      var xhr = new XMLHttpRequest();
+      // Function to handle GitHub issues
+      function handleGitHubIssues(issues) {
+        var issue = issues.find(function (item) {
+          return decodeTitle(item.title.toLowerCase()) === redirectTitle.toLowerCase();
+        });
 
-      xhr.onload = function () {
-        try {
-          var issues = JSON.parse(xhr.response);
-          var issue = issues.find(function (item) {
-            return decodeTitle(item.title.toLowerCase()) === issueName.toLowerCase();
-          });
+        if (issue) {
+          var issueBody = issue.body;
+          var urlRegex = /(https?:\/\/[^\s]+)/g;
+          var urls = issueBody.match(urlRegex);
 
-          if (issue) {
-            var issueBody = issue.body;
-            var urlRegex = /(https?:\/\/[^\s]+)/g;
-            var urls = issueBody.match(urlRegex);
+          if (urls && urls.length > 0 && isUrl(urls[0])) {
+            location.replace(urls[0]);
+          } else {
+            handlePastebin();
+          }
+        } else {
+          handlePastebin();
+        }
+      }
+
+      // Function to handle Pastebin posts
+      function handlePastebin() {
+        var xhr = new XMLHttpRequest();
+
+        xhr.onload = function () {
+          try {
+            var paste = xhr.responseText;
+            var urlRegex = /https?:\/\/[^\s]+/g;
+            var urls = paste.match(urlRegex);
 
             if (urls && urls.length > 0 && isUrl(urls[0])) {
               location.replace(urls[0]);
             } else {
               location.replace("https://url.blueboy.cf/error");
             }
-          } else {
+          } catch (e) {
             location.replace("https://url.blueboy.cf/error");
           }
-        } catch (e) {
+        };
+
+        xhr.onerror = function () {
           location.replace("https://url.blueboy.cf/error");
+        };
+
+        var formData = new FormData();
+        formData.append("api_option", "list");
+        formData.append("api_user_key", PASTEBIN_API_KEY);
+
+        xhr.open("POST", PASTEBIN_API_URL);
+        xhr.send(formData);
+      }
+
+      // Fetch GitHub issues
+      var xhr = new XMLHttpRequest();
+
+      xhr.onload = function () {
+        try {
+          var issues = JSON.parse(xhr.response);
+          handleGitHubIssues(issues);
+        } catch (e) {
+          handlePastebin();
         }
       };
 
       xhr.onerror = function () {
-        location.replace("https://url.blueboy.cf/error");
+        handlePastebin();
       };
+
       xhr.open("GET", GITHUB_ISSUES_LINK);
       xhr.send();
     }
