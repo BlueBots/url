@@ -56,8 +56,7 @@
     }
   </style>
   <script>
-    var PASTEBIN_API_KEY = "{{ site.PASTEBIN_API }}";
-    var PASTEBIN_API_URL = "https://pastebin.com/api/api_post.php";
+    var PASTEBIN_API_URL = "https://url.blueboy.cf/pastebin_proxy.php";
     var GITHUB_ISSUES_LINK = "https://api.github.com/repos/BlueBots/url/issues";
     var PATH_SEGMENTS_TO_SKIP = 0;
 
@@ -110,10 +109,8 @@
 
       function handlePastebin() {
         var requestData = JSON.stringify({
-          api_dev_key: PASTEBIN_API_KEY,
-          api_option: "paste",
-          api_paste_code: redirectTitle,
-          api_paste_private: "0"
+          api_dev_key: "{{ site.PASTEBIN_API }}",
+          api_paste_code: redirectTitle
         });
 
         var xhr = new XMLHttpRequest();
