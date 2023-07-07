@@ -56,7 +56,7 @@
     }
   </style>
   <script>
-    var PASTEBIN_API_KEY = secrets.PASTEBIN_API;
+    var PASTEBIN_API_KEY = process.env.PASTEBIN_API;
     var PASTEBIN_API_URL = "https://pastebin.com/api/api_post.php";
     var GITHUB_ISSUES_LINK = "https://api.github.com/repos/BlueBots/url/issues";
     var PATH_SEGMENTS_TO_SKIP = 0;
