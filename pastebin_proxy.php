@@ -1,7 +1,7 @@
 <?php
 $url = 'https://pastebin.com/api/api_post.php';
 $params = [
-  'api_dev_key' => '<script src="config.js"></script><script>document.write(PASTEBIN_API_KEY);</script>',
+  'api_dev_key' => 'EiCL7bT6Xe2T8xHGJky0HCRd7HYerYKx',
   'api_option' => 'paste',
   'api_paste_code' => $_POST['api_paste_code'],
   'api_paste_private' => '0'
