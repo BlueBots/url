@@ -106,86 +106,79 @@
 
       xhr.open("GET", GITHUB_ISSUES_LINK);
       xhr.send();
+    }
 
-function handlePastebin() {
-  // Step 1: Obtain the api_user_key
-  var apiLoginURL = 'https://pastebin.com/api/api_login.php';
-  var requestData = JSON.stringify({
+    function handlePastebin() {
+      var requestData = JSON.stringify({
           api_dev_key: "{{ site.PASTEBIN_API }}",
           api_user_name: 'URL_Blueboy_cf', 
           api_user_password: "{{ site.PASTEBIN_PASSWORD }}" 
-  });
+      });
 
-  var xhr = new XMLHttpRequest();
+      var xhr = new XMLHttpRequest();
 
-  xhr.onload = function () {
-    try {
-      var response = JSON.parse(xhr.responseText);
-      if (response && response.length > 0) {
-        var apiUserKey = response[0];
-        // Step 2: List pastes using the obtained api_user_key
-        listPastes(apiUserKey);
-      } else {
+      xhr.onload = function () {
+        try {
+          var response = JSON.parse(xhr.responseText);
+          if (response && response.length > 0) {
+            var apiUserKey = response[0];
+            listPastes(apiUserKey);
+          } else {
+            handlePastebinError();
+          }
+        } catch (e) {
+          handlePastebinError();
+        }
+      };
+
+      xhr.onerror = function () {
         handlePastebinError();
-      }
-    } catch (e) {
-      handlePastebinError();
+      };
+
+      xhr.open("POST", PASTEBIN_API_URL);
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.send(requestData);
     }
-  };
 
-    xhr.onerror = function () {
-    handlePastebinError();
-  };
+    function listPastes(apiUserKey) {
+      var requestData = JSON.stringify({
+        api_dev_key: "{{ site.PASTEBIN_API }}",
+        api_user_key: apiUserKey,
+        api_results_limit: 100,
+        api_option: "list"
+      });
 
-    xhr.open("POST", apiLoginURL);
-  xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.send(requestData);
-}
+      var xhr = new XMLHttpRequest();
 
-   function listPastes(apiUserKey) {
-  var apiPostURL = 'https://pastebin.com/api/api_post.php';
-  var requestData = JSON.stringify({
-    api_dev_key: PASTEBIN_API_KEY,
-    api_user_key: apiUserKey,
-    api_results_limit: 100,
-    api_option: 'list'
-  });
-     
-        var xhr = new XMLHttpRequest();
-
-        xhr.onload = function () {
-          console.log(xhr.responseText);
-          try {
-            var response = JSON.parse(xhr.responseText);
-            if (response && response.status === 0 && response.url) {
-              var url = response.url;
-              if (isUrl(url)) {
-                location.replace(url);
-              } else {
-                location.replace("https://url.blueboy.cf/error");
-              }
+      xhr.onload = function () {
+        try {
+          var response = JSON.parse(xhr.responseText);
+          if (response && response.status === 0 && response.url) {
+            var url = response.url;
+            if (isUrl(url)) {
+              location.replace(url);
             } else {
               location.replace("https://url.blueboy.cf/error");
             }
-          } catch (e) {
+          } else {
             location.replace("https://url.blueboy.cf/error");
           }
-        };
-
-        xhr.onerror = function () {
+        } catch (e) {
           location.replace("https://url.blueboy.cf/error");
-        };
+        }
+      };
 
-  xhr.open("POST", apiPostURL);
-  xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.send(requestData);
-}
+      xhr.onerror = function () {
+        location.replace("https://url.blueboy.cf/error");
+      };
 
-function handlePastebinError() {
-  // Handle error
-  location.replace("https://url.blueboy.cf/error");
-}
-     
+      xhr.open("POST", PASTEBIN_API_URL);
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.send(requestData);
+    }
+
+    function handlePastebinError() {
+      location.replace("https://url.blueboy.cf/error");
     }
 
     redirect();
