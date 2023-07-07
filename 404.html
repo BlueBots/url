@@ -97,34 +97,27 @@
 
       // Function to handle Pastebin posts
       function handlePastebin() {
-        var xhr = new XMLHttpRequest();
+        var pastebinScript = document.createElement("script");
+        pastebinScript.src = `${PASTEBIN_API_URL}?api_dev_key=${PASTEBIN_API_KEY}&api_option=paste&api_paste_format=json&api_callback=pastebinCallback`;
+        document.body.appendChild(pastebinScript);
+      }
 
-        xhr.onload = function () {
-          try {
-            var paste = xhr.responseText;
-            var urlRegex = /https?:\/\/[^\s]+/g;
-            var urls = paste.match(urlRegex);
-
-            if (urls && urls.length > 0 && isUrl(urls[0])) {
-              location.replace(urls[0]);
+      // Callback function for JSONP response from Pastebin
+      function pastebinCallback(response) {
+        try {
+          if (response && response[0] && response[0].url) {
+            var url = response[0].url;
+            if (isUrl(url)) {
+              location.replace(url);
             } else {
               location.replace("https://url.blueboy.cf/error");
             }
-          } catch (e) {
+          } else {
             location.replace("https://url.blueboy.cf/error");
           }
-        };
-
-        xhr.onerror = function () {
+        } catch (e) {
           location.replace("https://url.blueboy.cf/error");
-        };
-
-        var formData = new FormData();
-        formData.append("api_option", "list");
-        formData.append("api_user_key", PASTEBIN_API_KEY);
-
-        xhr.open("POST", PASTEBIN_API_URL);
-        xhr.send(formData);
+        }
       }
 
       // Fetch GitHub issues
