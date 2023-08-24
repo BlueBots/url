@@ -86,7 +86,7 @@
             var urlRegex = /(https?:\/\/[^\s]+)/g;
             var urls = issueBody.match(urlRegex);
 
-            if (urls && urls.length > 0 && isUrl(urls[0])) {
+            if (urls && urls.length > 0) {
               location.replace(urls[0]);
             } else {
               location.replace("https://url.blueboy.cf/error");
